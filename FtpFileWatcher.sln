@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33214.272
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FtpFileWatcher", "FtpFileWatcher.csproj", "{EEBF1711-0CF6-4F33-AD6D-6498A20CA150}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EEBF1711-0CF6-4F33-AD6D-6498A20CA150}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEBF1711-0CF6-4F33-AD6D-6498A20CA150}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEBF1711-0CF6-4F33-AD6D-6498A20CA150}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEBF1711-0CF6-4F33-AD6D-6498A20CA150}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {84CB4C98-D0CD-41D2-80AA-5845024EBD74}
+	EndGlobalSection
+EndGlobal
