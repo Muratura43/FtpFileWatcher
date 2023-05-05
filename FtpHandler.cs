@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Threading.Tasks;
+using Unity;
 
 namespace FtpFileWatcher
 {
@@ -15,11 +15,9 @@ namespace FtpFileWatcher
             _config = config;
         }
 
-        public FtpHandler()
+        public FtpHandler(IUnityContainer container)
         {
-            //TODO: remove after bootstrapper implementation
-
-
+            _config = container.Resolve<FtpConfig>();
         }
 
         public IEnumerable<string> GetDirectoryListing()

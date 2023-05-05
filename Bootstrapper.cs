@@ -1,13 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Unity;
+using System.Configuration;
 
 namespace FtpFileWatcher
 {
-    public class Bootstrapper
+    internal static class Bootstrapper
     {
+        public static IUnityContainer Setup(this IUnityContainer container)
+        {
+            container.RegisterFactory<FtpConfig>((c) => new FtpConfig()
+            {
+                Host = ConfigurationManager.AppSettings["host"],
+                UserId = ConfigurationManager.AppSettings["userId"],
+                Password = ConfigurationManager.AppSettings["password"],
+                RootPath = ConfigurationManager.AppSettings["rootPath"]
+            });
 
+            return container;
+        }
     }
 }

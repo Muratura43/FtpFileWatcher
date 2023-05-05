@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Unity;
 
 namespace FtpFileWatcher
 {
@@ -7,7 +8,9 @@ namespace FtpFileWatcher
     {
         static void Main(string[] args)
         {
-            var handler = new FtpHandler();
+            var container = new UnityContainer();
+
+            var handler = new FtpHandler(container);
             var files = handler.GetDirectoryListing();
 
             foreach (var f in files)
