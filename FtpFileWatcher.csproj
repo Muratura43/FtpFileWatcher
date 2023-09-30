@@ -62,12 +62,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
-    <Compile Include="FileWatcher.cs" />
-    <Compile Include="FtpConfig.cs" />
-    <Compile Include="FtpHandler.cs" />
-    <Compile Include="IFtpHandler.cs" />
+    <Compile Include="Business\FileWatcher.cs" />
+    <Compile Include="Common\FtpConfig.cs" />
+    <Compile Include="Business\FtpHandler.cs" />
+    <Compile Include="Interfaces\IFileWatcher.cs" />
+    <Compile Include="Interfaces\IFtpHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\FileTransferService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -78,5 +80,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

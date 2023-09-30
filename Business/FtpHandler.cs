@@ -1,10 +1,11 @@
-﻿using System;
+﻿using FtpFileWatcher.Common;
+using FtpFileWatcher.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using Unity;
 
-namespace FtpFileWatcher
+namespace FtpFileWatcher.Business
 {
     public class FtpHandler : IFtpHandler
     {

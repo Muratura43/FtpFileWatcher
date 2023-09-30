@@ -1,16 +1,21 @@
-﻿using System;
+﻿using FtpFileWatcher.Common;
+using FtpFileWatcher.Interfaces;
+using System;
 using System.IO;
 
-namespace FtpFileWatcher
+namespace FtpFileWatcher.Business
 {
-    public class FileWatcher : IDisposable
+    public class FileWatcher : IFileWatcher
     {
         private readonly FileSystemWatcher _watcher;
         private readonly FtpConfig _config;
+        private readonly IFtpHandler _ftpHandler;
 
-        public FileWatcher(FtpConfig config)
+        public FileWatcher(FtpConfig config, IFtpHandler ftpHandler)
         {
             _config = config;
+            _ftpHandler = ftpHandler;
+
             _watcher = new FileSystemWatcher(_config.WatchPath);
 
             _watcher.NotifyFilter = NotifyFilters.Attributes

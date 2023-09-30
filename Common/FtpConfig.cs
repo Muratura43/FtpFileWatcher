@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FtpFileWatcher
+namespace FtpFileWatcher.Common
 {
     public class FtpConfig
     {
@@ -19,7 +19,7 @@ namespace FtpFileWatcher
         public bool Equals(FtpFile other)
         {
             return other != null &&
-                FullPath == other.FullPath && 
+                FullPath == other.FullPath &&
                 FileSize == other.FileSize;
         }
 

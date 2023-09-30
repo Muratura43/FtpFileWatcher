@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FtpFileWatcher
+namespace FtpFileWatcher.Interfaces
 {
     public interface IFtpHandler
     {

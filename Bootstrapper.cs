@@ -1,5 +1,8 @@
 ﻿using Unity;
 using System.Configuration;
+using FtpFileWatcher.Interfaces;
+using FtpFileWatcher.Common;
+using FtpFileWatcher.Business;
 
 namespace FtpFileWatcher
 {
@@ -15,6 +18,9 @@ namespace FtpFileWatcher
                 RootPath = ConfigurationManager.AppSettings["rootPath"],
                 WatchPath = ConfigurationManager.AppSettings["watchPath"]
             });
+
+            container.RegisterType<IFtpHandler, FtpHandler>();
+            container.RegisterType<IFileWatcher, FileWatcher>();
 
             return container;
         }
