@@ -3,31 +3,34 @@ using System.IO;
 
 namespace FtpFileWatcher
 {
-    public class FileWatcher
+    public class FileWatcher : IDisposable
     {
-        public void Watch()
+        private readonly FileSystemWatcher _watcher;
+        private readonly FtpConfig _config;
+
+        public FileWatcher(FtpConfig config)
         {
-            using (var watcher = new FileSystemWatcher(@"E:\Repos\FtpFileWatcher\Test"))
-            {
-                watcher.NotifyFilter = NotifyFilters.Attributes
-                                 | NotifyFilters.CreationTime
-                                 | NotifyFilters.DirectoryName
-                                 | NotifyFilters.FileName
-                                 | NotifyFilters.LastAccess
-                                 | NotifyFilters.LastWrite
-                                 | NotifyFilters.Security
-                                 | NotifyFilters.Size;
+            _config = config;
+            _watcher = new FileSystemWatcher(_config.WatchPath);
 
-                watcher.Changed += OnChanged;
-                watcher.Created += OnCreated;
-                watcher.Deleted += OnDeleted;
-                watcher.Renamed += OnRenamed;
-                watcher.Error += OnError;
+            _watcher.NotifyFilter = NotifyFilters.Attributes
+                             | NotifyFilters.CreationTime
+                             | NotifyFilters.DirectoryName
+                             | NotifyFilters.FileName
+                             | NotifyFilters.LastAccess
+                             | NotifyFilters.LastWrite
+                             | NotifyFilters.Security
+                             | NotifyFilters.Size;
 
-                watcher.Filter = "*";
-                watcher.IncludeSubdirectories = true;
-                watcher.EnableRaisingEvents = true;
-            }
+            _watcher.Changed += OnChanged;
+            _watcher.Created += OnCreated;
+            _watcher.Deleted += OnDeleted;
+            _watcher.Renamed += OnRenamed;
+            _watcher.Error += OnError;
+
+            _watcher.Filter = "*";
+            _watcher.IncludeSubdirectories = true;
+            _watcher.EnableRaisingEvents = true;
         }
 
         private void OnChanged(object sender, FileSystemEventArgs e)
@@ -70,6 +73,11 @@ namespace FtpFileWatcher
 
                 PrintException(ex.InnerException);
             }
+        }
+
+        public void Dispose()
+        {
+            _watcher.Dispose();
         }
     }
 }

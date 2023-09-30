@@ -15,14 +15,14 @@ namespace FtpFileWatcher
             _config = config;
         }
 
-        public FtpHandler(IUnityContainer container)
-        {
-            _config = container.Resolve<FtpConfig>();
-        }
-
         public IEnumerable<string> GetDirectoryListing()
         {
             var request = GetRequest();
+            if (request == null)
+            {
+                yield break;
+            }
+
             request.Method = WebRequestMethods.Ftp.ListDirectory;
 
             using (var response = (FtpWebResponse)request.GetResponse())
@@ -52,6 +52,11 @@ namespace FtpFileWatcher
             long result = 0;
 
             var request = GetRequest(filename);
+            if (request == null)
+            {
+                return -1;
+            }
+
             request.Method = WebRequestMethods.Ftp.GetFileSize;
 
             try
@@ -79,6 +84,11 @@ namespace FtpFileWatcher
             }
 
             var request = GetRequest(Path.GetFileName(fullPath));
+            if (request == null)
+            {
+                return;
+            }
+
             request.Method = WebRequestMethods.Ftp.UploadFile;
 
             byte[] fileContents;
@@ -108,6 +118,11 @@ namespace FtpFileWatcher
             try
             {
                 var request = GetRequest();
+                if (request == null)
+                {
+                    return null;
+                }
+
                 request.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
 
                 using (var response = (FtpWebResponse)request.GetResponse())
@@ -127,14 +142,21 @@ namespace FtpFileWatcher
 
         private FtpWebRequest GetRequest(string fileName = null)
         {
-            var path = fileName == null
-                ? _config.Host +_config.RootPath
-                : Path.Combine(_config.Host + _config.RootPath, fileName);
+            try
+            {
+                var path = fileName == null
+                    ? _config.Host + _config.RootPath
+                    : Path.Combine(_config.Host + _config.RootPath, fileName);
 
-            var request = (FtpWebRequest)WebRequest.Create(path);
-            request.Credentials = new NetworkCredential(_config.UserId, _config.Password);
+                var request = (FtpWebRequest)WebRequest.Create(path);
+                request.Credentials = new NetworkCredential(_config.UserId, _config.Password);
 
-            return request;
+                return request;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }

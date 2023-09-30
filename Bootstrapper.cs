@@ -12,7 +12,8 @@ namespace FtpFileWatcher
                 Host = ConfigurationManager.AppSettings["host"],
                 UserId = ConfigurationManager.AppSettings["userId"],
                 Password = ConfigurationManager.AppSettings["password"],
-                RootPath = ConfigurationManager.AppSettings["rootPath"]
+                RootPath = ConfigurationManager.AppSettings["rootPath"],
+                WatchPath = ConfigurationManager.AppSettings["watchPath"]
             });
 
             return container;

@@ -8,6 +8,7 @@ namespace FtpFileWatcher
         public string UserId { get; set; }
         public string Password { get; set; }
         public string RootPath { get; set; }
+        public string WatchPath { get; set; }
     }
 
     public class FtpFile : IEquatable<FtpFile>
