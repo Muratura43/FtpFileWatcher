@@ -2,6 +2,7 @@
 using FtpFileWatcher.Interfaces;
 using System;
 using System.IO;
+using System.Runtime.Caching;
 
 namespace FtpFileWatcher.Business
 {
@@ -11,6 +12,8 @@ namespace FtpFileWatcher.Business
         private readonly FtpConfig _config;
         private readonly IFtpHandler _ftpHandler;
 
+        private readonly MemoryCache _cache = MemoryCache.Default;
+
         public FileWatcher(FtpConfig config, IFtpHandler ftpHandler)
         {
             _config = config;
@@ -18,40 +21,31 @@ namespace FtpFileWatcher.Business
 
             _watcher = new FileSystemWatcher(_config.WatchPath);
 
-            _watcher.NotifyFilter = NotifyFilters.Attributes
-                             | NotifyFilters.CreationTime
-                             | NotifyFilters.DirectoryName
-                             | NotifyFilters.FileName
-                             | NotifyFilters.LastAccess
-                             | NotifyFilters.LastWrite
-                             | NotifyFilters.Security
-                             | NotifyFilters.Size;
-
+            _watcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite;
+            _watcher.Filter = "*.*";
+            _watcher.IncludeSubdirectories = true;
+            
             _watcher.Changed += OnChanged;
             _watcher.Created += OnCreated;
             _watcher.Deleted += OnDeleted;
             _watcher.Renamed += OnRenamed;
             _watcher.Error += OnError;
 
-            _watcher.Filter = "*";
-            _watcher.IncludeSubdirectories = true;
             _watcher.EnableRaisingEvents = true;
         }
 
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
-            if (e.ChangeType != WatcherChangeTypes.Changed)
-            {
-                return;
-            }
-
             Console.WriteLine($"Changed: {e.FullPath}");
+
+            AddToCache(e.FullPath);
         }
 
         private void OnCreated(object sender, FileSystemEventArgs e)
         {
-            string value = $"Created: {e.FullPath}";
-            Console.WriteLine(value);
+            Console.WriteLine($"Created: {e.FullPath}");
+
+            AddToCache(e.FullPath);
         }
 
         private void OnDeleted(object sender, FileSystemEventArgs e) =>
@@ -64,8 +58,11 @@ namespace FtpFileWatcher.Business
             Console.WriteLine($"    New: {e.FullPath}");
         }
 
-        private void OnError(object sender, ErrorEventArgs e) =>
+        private void OnError(object sender, ErrorEventArgs e)
+        {
+            Console.WriteLine("ERROR: ");
             PrintException(e.GetException());
+        }
 
         private void PrintException(Exception ex)
         {
@@ -80,9 +77,30 @@ namespace FtpFileWatcher.Business
             }
         }
 
+        private void AddToCache(string fullPath)
+        {
+            var item = new CacheItem(fullPath);
+            var policy = new CacheItemPolicy
+            {
+                RemovedCallback = (args) => 
+                { 
+                    if (args.RemovedReason == CacheEntryRemovedReason.Expired)
+                    {
+                        _ftpHandler.UploadFile(args.CacheItem.Key);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"WARNING: {args.CacheItem.Key} was removed unexpectedly from cache and may not be processed. Reason: {args.RemovedReason}.");
+                    }
+                },
+                SlidingExpiration = TimeSpan.FromSeconds(_config.CacheSeconds)
+            };
+        }
+
         public void Dispose()
         {
             _watcher.Dispose();
+            _cache.Dispose();
         }
     }
 }

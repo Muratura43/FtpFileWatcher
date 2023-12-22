@@ -3,6 +3,7 @@ using System.Configuration;
 using FtpFileWatcher.Interfaces;
 using FtpFileWatcher.Common;
 using FtpFileWatcher.Business;
+using System;
 
 namespace FtpFileWatcher
 {
@@ -16,7 +17,8 @@ namespace FtpFileWatcher
                 UserId = ConfigurationManager.AppSettings["userId"],
                 Password = ConfigurationManager.AppSettings["password"],
                 RootPath = ConfigurationManager.AppSettings["rootPath"],
-                WatchPath = ConfigurationManager.AppSettings["watchPath"]
+                WatchPath = ConfigurationManager.AppSettings["watchPath"],
+                CacheSeconds = Convert.ToInt32(ConfigurationManager.AppSettings["cacheSeconds"])
             });
 
             container.RegisterType<IFtpHandler, FtpHandler>();

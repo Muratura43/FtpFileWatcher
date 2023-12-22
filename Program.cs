@@ -1,16 +1,11 @@
-﻿using FtpFileWatcher.Interfaces;
-using FtpFileWatcher.Service;
-using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using FtpFileWatcher.Service;
 using Unity;
 
 namespace FtpFileWatcher
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             var container = new UnityContainer();
             container.Setup();
